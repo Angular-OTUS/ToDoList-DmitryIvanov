@@ -15,18 +15,22 @@
   </ng-container>
 
   <ng-template #noInlineEdit>
+    <mat-checkbox [checked]="isStatusCompleted()" (click)="onStatusClick($event)"></mat-checkbox>
     <span
+      class="todo-list-item__text"
       tabindex="0"
       (click)="onSelect()"
       (keydown)="onSelect()"
       (dblclick)="onDblClick()"
-      appTooltip="Click on a task to see its description, or double-click to edit the task text"
-      >{{ text }}</span
-    >
+      appTooltip="Click on a task to see its description, or double-click to edit the task text">
+      {{ text }}
+    </span>
+
     <app-button
-      title="Delete"
       (clickEvent)="onDelete()"
       appTooltip="Click the button to delete the task"
-      class="button button--delete"></app-button>
+      class="button button--delete">
+      Delete
+    </app-button>
   </ng-template>
 </li>

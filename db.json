@@ -1,0 +1,22 @@
+{
+  "todos": [
+    {
+      "id": "1",
+      "text": "Bye a new gaming laptop",
+      "description": "Description for the task Bye a new gaming laptop",
+      "status": "InProgress"
+    },
+    {
+      "id": "2",
+      "text": "Complete previous task",
+      "description": "Description for the task Complete previous task",
+      "status": "Completed"
+    },
+    {
+      "id": "3",
+      "text": "Create some angular app",
+      "description": "Description for the task Create some angular app",
+      "status": "InProgress"
+    }
+  ]
+}

@@ -15,7 +15,8 @@
     "test": "npx ng test",
     "lint": "npx ng lint",
     "lint:fix": "npx ng lint --fix",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "json-server": "npx json-server --watch db.json"
   },
   "private": true,
   "dependencies": {
@@ -29,6 +30,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
@@ -48,6 +50,9 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-prettier": "^5.2.1",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",

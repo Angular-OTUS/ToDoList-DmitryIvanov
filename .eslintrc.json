@@ -4,13 +4,25 @@
   "overrides": [
     {
       "files": ["*.ts"],
+      "env": {
+        "browser": true,
+        "es2020": true
+      },
       "extends": [
+        "plugin:import/recommended",
+        "plugin:import/typescript",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates",
         "plugin:prettier/recommended"
       ],
+      "parserOptions": {
+        "createDefaultProgram": true,
+        "project": "./tsconfig.json",
+        "sourceType": "module"
+      },
+      "plugins": ["import", "@typescript-eslint", "@angular-eslint", "prettier"],
       "rules": {
         "@angular-eslint/directive-selector": [
           "error",
@@ -27,7 +39,43 @@
             "prefix": "app",
             "style": "kebab-case"
           }
+        ],
+        "import/order": [
+          "error",
+          {
+            "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type", "unknown"],
+            "pathGroups": [
+              {
+                "pattern": "rxjs",
+                "group": "external",
+                "position": "before"
+              },
+              {
+                "pattern": "@angular",
+                "group": "external",
+                "position": "before"
+              },
+              {
+                "pattern": "*.css$",
+                "group": "internal",
+                "position": "after"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["type"],
+            "alphabetize": {
+              "order": "asc",
+              "caseInsensitive": true
+            }
+          }
         ]
+      },
+      "settings": {
+        "import/resolver": {
+          "typescript": {
+            "alwaysTryTypes": true,
+            "project": "./tsconfig.json"
+          }
+        }
       }
     },
     {

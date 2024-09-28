@@ -1,10 +1,10 @@
-import { Inject, Injectable, Injector } from '@angular/core';
 import { Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { Inject, Injectable, Injector } from '@angular/core';
 
-import { ToastComponent } from './toast.component';
-import { TOAST_REF, ToastRef } from './toast-ref';
 import { TOAST_CONFIG_TOKEN, TOAST_DATA, ToastConfig, ToastData } from './toast-config';
+import { TOAST_REF, ToastRef } from './toast-ref';
+import { ToastComponent } from './toast.component';
 
 @Injectable({
   providedIn: 'root',

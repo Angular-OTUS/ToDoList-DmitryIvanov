@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TaskItemStatus } from '../../services/to-do-list';
 
 @Component({
   selector: 'app-to-do-list-item',
@@ -7,7 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ToDoListItemComponent {
   @Input({ required: true }) text!: string;
+  @Input({ required: true }) status!: TaskItemStatus;
   @Input() inlineEdit = false;
+
+  @Output() changeStatusEvent = new EventEmitter<TaskItemStatus>();
 
   @Output() deleteEvent = new EventEmitter();
   @Output() selectEvent = new EventEmitter();
@@ -17,6 +21,15 @@ export class ToDoListItemComponent {
   @Output() inlineEditCancelEvent = new EventEmitter();
 
   public taskInput = '';
+
+  public isStatusCompleted(): boolean {
+    return this.status === 'Completed';
+  }
+
+  public onStatusClick(event: MouseEvent): void {
+    event.preventDefault();
+    this.changeStatusEvent.emit(this.isStatusCompleted() ? 'InProgress' : 'Completed');
+  }
 
   public onDelete(): void {
     this.deleteEvent.emit();

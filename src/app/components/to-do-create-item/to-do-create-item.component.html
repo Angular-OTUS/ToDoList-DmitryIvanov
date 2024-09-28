@@ -1,0 +1,31 @@
+<form #newTaskForm="ngForm" (ngSubmit)="onSubmit(newTaskForm)">
+  <div class="row">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <input
+        type="text"
+        matInput
+        id="text"
+        name="text"
+        [(ngModel)]="newTask.text"
+        placeholder="Name of the task"
+        appTaskName />
+    </mat-form-field>
+    <app-button
+      class="button button--add"
+      type="submit"
+      appTooltip="Click the button to add a task"
+      [disabled]="!!newTaskForm.invalid">
+      Add task
+    </app-button>
+  </div>
+  <div class="row">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <textarea
+        matInput
+        id="description"
+        name="description"
+        [(ngModel)]="newTask.description"
+        placeholder="Description of the task"></textarea>
+    </mat-form-field>
+  </div>
+</form>

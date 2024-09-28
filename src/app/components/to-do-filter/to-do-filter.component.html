@@ -1,0 +1,11 @@
+<div>
+  <span class="filter-label">Filter task list by status:</span>
+  <mat-button-toggle-group multiple [value]="value" (change)="onChange($event)">
+    <mat-button-toggle value="InProgress">
+      <mat-icon>hourglass_empty</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="Completed">
+      <mat-icon>verified</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

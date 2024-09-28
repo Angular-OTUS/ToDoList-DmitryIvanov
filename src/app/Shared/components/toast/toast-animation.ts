@@ -1,5 +1,12 @@
-import { animate, AnimationTriggerMetadata, state, style, transition, trigger } from '@angular/animations';
-import { AnimationEvent } from '@angular/animations';
+import {
+  animate,
+  AnimationTriggerMetadata,
+  state,
+  style,
+  transition,
+  trigger,
+  AnimationEvent,
+} from '@angular/animations';
 
 export const toastAnimations: {
   readonly fadeToast: AnimationTriggerMetadata;
