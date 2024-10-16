@@ -1,8 +1,8 @@
 import { catchError, Observable, of, Subject, takeUntil, tap } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TaskItem, TaskItems, TaskItemStatus, ToDoListService } from '../../services/to-do-list';
-import { ToastService } from '../../Shared/components/toast';
-import { NewTask } from '../to-do-create-item/to-do-create-item.component';
+import { TaskItem, TaskItems, TaskItemStatus, ToDoListService } from '../../services';
+import { ToastService } from '../../Shared/components';
+import { NewTask } from '../to-do-create-item';
 
 @Component({
   selector: 'app-to-do-list',

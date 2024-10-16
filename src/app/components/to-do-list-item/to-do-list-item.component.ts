@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TaskItemStatus } from '../../services/to-do-list';
+import { TaskItemStatus } from '../../services';
 
 @Component({
   selector: 'app-to-do-list-item',
