@@ -1,4 +1,4 @@
-import { GlobalPositionStrategy, Overlay } from '@angular/cdk/overlay';
+import { GlobalPositionStrategy, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Inject, Injectable, Injector } from '@angular/core';
 
@@ -19,14 +19,14 @@ export class ToastService {
   ) {}
 
   public showToast(data: ToastData): ToastRef {
-    const positionStrategy = this.getPositionStrategy();
-    const overlayRef = this.overlay.create({ positionStrategy });
+    const positionStrategy: GlobalPositionStrategy = this.getPositionStrategy();
+    const overlayRef: OverlayRef = this.overlay.create({ positionStrategy });
 
-    const toastRef = new ToastRef(overlayRef);
+    const toastRef: ToastRef = new ToastRef(overlayRef);
     this.lastToast = toastRef;
 
-    const injector = this.getInjector(data, toastRef, this.parentInjector);
-    const toastPortal = new ComponentPortal(ToastComponent, null, injector);
+    const injector: Injector = this.getInjector(data, toastRef, this.parentInjector);
+    const toastPortal: ComponentPortal<ToastComponent> = new ComponentPortal(ToastComponent, null, injector);
 
     overlayRef.attach(toastPortal);
 
@@ -42,7 +42,7 @@ export class ToastService {
   }
 
   private getPosition(): string {
-    const position =
+    const position: number =
       this.lastToast && this.lastToast.isVisible()
         ? this.lastToast.getPosition().bottom
         : (this.toastConfig?.position?.top ?? 0);

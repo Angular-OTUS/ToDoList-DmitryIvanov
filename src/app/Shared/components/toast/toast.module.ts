@@ -4,7 +4,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { defaultToastConfig, TOAST_CONFIG_TOKEN } from './toast-config';
+import { defaultToastConfig, TOAST_CONFIG_TOKEN, ToastConfig } from './toast-config';
 import { ToastComponent } from './toast.component';
 
 @NgModule({
@@ -12,7 +12,7 @@ import { ToastComponent } from './toast.component';
   declarations: [ToastComponent],
 })
 export class ToastModule {
-  public static forRoot(config = defaultToastConfig): ModuleWithProviders<ToastModule> {
+  public static forRoot(config: ToastConfig = defaultToastConfig): ModuleWithProviders<ToastModule> {
     return {
       ngModule: ToastModule,
       providers: [

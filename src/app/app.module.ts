@@ -13,15 +13,16 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TaskNameDirective } from './components/to-do-create-item/task-name.directive';
-import { ToDoCreateItemComponent } from './components/to-do-create-item/to-do-create-item.component';
-import { ToDoFilterComponent } from './components/to-do-filter/to-do-filter.component';
-import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
-import { ToDoListItemComponent } from './components/to-do-list-item/to-do-list-item.component';
-import { ButtonComponent } from './Shared/components/button';
-import { SpinnerComponent } from './Shared/components/spinner';
-import { ToastModule } from './Shared/components/toast';
-import { TooltipDirective } from './Shared/directives/tooltip/tooltip.directive';
+import {
+  TaskNameDirective,
+  ToDoCreateItemComponent,
+  ToDoFilterComponent,
+  ToDoItemViewComponent,
+  ToDoListComponent,
+  ToDoListItemComponent,
+} from './components';
+import { ButtonComponent, SpinnerComponent, ToastModule } from './Shared/components';
+import { TooltipDirective } from './Shared/directives';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { TooltipDirective } from './Shared/directives/tooltip/tooltip.directive'
     ToDoFilterComponent,
     ToDoCreateItemComponent,
     TaskNameDirective,
+    ToDoItemViewComponent,
   ],
   imports: [
     BrowserModule,

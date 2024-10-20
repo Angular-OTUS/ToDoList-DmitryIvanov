@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-export const TOAST_DATA = new InjectionToken<ToastData>('toast-data');
+export const TOAST_DATA: InjectionToken<ToastData> = new InjectionToken<ToastData>('toast-data');
 
 export interface ToastData {
   type: ToastType;
@@ -31,4 +31,4 @@ export const defaultToastConfig: ToastConfig = {
   },
 };
 
-export const TOAST_CONFIG_TOKEN = new InjectionToken('toast-config');
+export const TOAST_CONFIG_TOKEN: InjectionToken<ToastConfig> = new InjectionToken<ToastConfig>('toast-config');

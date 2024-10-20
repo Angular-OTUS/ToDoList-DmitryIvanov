@@ -22,14 +22,15 @@
             (changeStatusEvent)="updateTaskStatus(item.id, $event)"
             [inlineEdit]="inlineEditItemId === item.id"
             (deleteEvent)="delTask(item.id)"
-            (selectEvent)="selectTask(item.id)"
+            (selectEvent)="goToTask(item.id)"
             (inlineEditEnterEvent)="inlineEditEnter(item.id)"
             (inlineEditSaveEvent)="inlineEditorSave(item.id, $event)"
             (inlineEditCancelEvent)="inlineEditorCancel(item.id)" />
         </ul>
-        <div class="todo-list-item__description" *ngIf="selectedItemId !== null">
-          {{ selectedDescription() }}
-        </div>
+        <router-outlet></router-outlet>
+        <!--        <div class="todo-list-item__description" *ngIf="selectedItemId !== null">-->
+        <!--          {{ selectedDescription() }}-->
+        <!--        </div>-->
       </div>
     </ng-template>
   </mat-card-content>

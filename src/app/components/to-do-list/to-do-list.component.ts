@@ -1,9 +1,9 @@
-import { catchError, Subject, takeUntil, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TaskItem, TaskItems, TaskItemStatus, ToDoListService } from '../../services/to-do-list';
-import { ToastService } from '../../Shared/components/toast';
-import { NewTask } from '../to-do-create-item/to-do-create-item.component';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { RouteTokens } from '../../app-routing.module';
+import { TaskItem, TaskItems, TaskItemStatus, ToDoListService } from '../../services';
+import { NewTask } from '../to-do-create-item';
 
 @Component({
   selector: 'app-to-do-list',
@@ -13,31 +13,32 @@ import { NewTask } from '../to-do-create-item/to-do-create-item.component';
 export class ToDoListComponent implements OnInit, OnDestroy {
   public taskItems: TaskItems = [];
   public filter: TaskItemStatus[] = ['InProgress', 'Completed'];
-  public isLoading = false;
+  public isLoading: boolean = false;
   public selectedItemId: string | null = null;
   public inlineEditItemId: string | null = null;
   private destroy$: Subject<void> = new Subject<void>();
+  private changeSelectedItem?: Subscription;
 
   constructor(
     private toDoListService: ToDoListService,
-    private toastService: ToastService
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
+
+  public goToTask(id: string): void {
+    if (this.selectedItemId === id) {
+      return this.clearSelectedItem();
+    }
+
+    void this.router.navigate([id], { relativeTo: this.route }).then(() => this.subscribeToChangeSelectedItem());
+  }
 
   public filterChange(event: TaskItemStatus[]): void {
     this.filter = event;
   }
 
   public filteredTaskItems(): TaskItems {
-    return this.taskItems.filter(item => this.filter.includes(item.status));
-  }
-
-  public selectTask(id: string): void {
-    this.selectedItemId = this.selectedItemId === id ? null : id;
-  }
-
-  public selectedDescription(): string {
-    const selectedItem = this.filteredTaskItems().find(item => item.id === this.selectedItemId);
-    return selectedItem ? selectedItem.description : '';
+    return this.taskItems.filter((item: TaskItem) => this.filter.includes(item.status));
   }
 
   public fetchTaskItems(): void {
@@ -45,76 +46,35 @@ export class ToDoListComponent implements OnInit, OnDestroy {
 
     this.toDoListService
       .getTaskItems()
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.toastService.showToast({ text: 'Error loading task list.', type: 'warning' });
-          return throwError(error);
-        }),
-        takeUntil(this.destroy$)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe((taskItems: TaskItems) => {
         this.taskItems = taskItems;
         this.isLoading = false;
       });
+
+    this.toDoListService.fetchTaskItems();
   }
 
   public addTask({ text, description }: NewTask): void {
     const newTaskItem: TaskItem = { id: String(this.getNextId()), text, description, status: 'InProgress' };
-    this.toDoListService
-      .addTaskItem(newTaskItem)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.toastService.showToast({ text: 'Error adding task.', type: 'warning' });
-          return throwError(error);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.toastService.showToast({ text: 'Task added', type: 'success' });
-        this.fetchTaskItems();
-      });
+    this.toDoListService.addTaskItem(newTaskItem);
   }
 
   public delTask(id: string): void {
+    this.toDoListService.deleteTaskItem(id);
     if (this.selectedItemId === id) {
-      this.selectedItemId = null;
+      this.clearSelectedItem();
     }
-
-    this.toDoListService
-      .deleteTaskItem(id)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.toastService.showToast({ text: 'Error deleting task.', type: 'warning' });
-          return throwError(error);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.toastService.showToast({ text: 'Task removed', type: 'warning' });
-        this.fetchTaskItems();
-      });
   }
 
   public updateTaskStatus(id: string, status: TaskItemStatus): void {
-    const idx = this.getTaskIdxById(id);
+    const idx: number = this.getTaskIdxById(id);
     if (idx < 0) {
       return;
     }
 
-    const updatedTask = { ...this.taskItems[idx], status };
-    this.toDoListService
-      .updateTaskItem(updatedTask)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.toastService.showToast({ text: 'Error updating task status.', type: 'warning' });
-          return throwError(error);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.showTaskStatus(status);
-        this.fetchTaskItems();
-      });
+    const updatedTask: TaskItem = { ...this.taskItems[idx], status };
+    this.toDoListService.updateTaskItem(updatedTask);
   }
 
   public inlineEditEnter(id: string): void {
@@ -125,26 +85,14 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     if (this.inlineEditItemId !== id) {
       return;
     }
-    const idx = this.getTaskIdxById(id);
+    const idx: number = this.getTaskIdxById(id);
     if (idx < 0) {
       return;
     }
 
-    const updatedTask = { ...this.taskItems[idx], text };
-    this.toDoListService
-      .updateTaskItem(updatedTask)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          this.toastService.showToast({ text: 'Error updating task text.', type: 'warning' });
-          return throwError(error);
-        }),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.toastService.showToast({ text: 'The task has been changed', type: 'info' });
-        this.inlineEditItemId = null;
-        this.fetchTaskItems();
-      });
+    const updatedTask: TaskItem = { ...this.taskItems[idx], text };
+    this.toDoListService.updateTaskItem(updatedTask);
+    this.inlineEditItemId = null;
   }
 
   public inlineEditorCancel(id: string): void {
@@ -154,6 +102,7 @@ export class ToDoListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.subscribeToChangeSelectedItem();
     this.fetchTaskItems();
   }
 
@@ -162,20 +111,33 @@ export class ToDoListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  private clearSelectedItem(): void {
+    this.unSubscribeToChangeSelectedItem();
+    this.selectedItemId = null;
+    void this.router.navigateByUrl(`/${RouteTokens.Tasks}`);
+  }
+
+  private unSubscribeToChangeSelectedItem(): void {
+    if (this.changeSelectedItem) {
+      this.changeSelectedItem.unsubscribe();
+      this.changeSelectedItem = undefined;
+    }
+  }
+
+  private subscribeToChangeSelectedItem(): void {
+    if (this.route.firstChild && !this.changeSelectedItem) {
+      this.changeSelectedItem = this.route.firstChild.paramMap
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((paramMap: ParamMap) => (this.selectedItemId = paramMap.get('taskId')));
+    }
+  }
+
   private getNextId(): number {
-    return Math.max(0, ...this.taskItems.map(item => Number(item.id))) + 1;
+    return Math.max(0, ...this.taskItems.map((item: TaskItem) => Number(item.id))) + 1;
   }
 
   // Возвращает -1 если задача с таким id не найдена
   private getTaskIdxById(id: string): number {
-    return this.taskItems.findIndex(item => item.id === id);
-  }
-
-  private showTaskStatus(status: TaskItemStatus): void {
-    if (status === 'Completed') {
-      this.toastService.showToast({ text: 'Task completed', type: 'success' });
-    } else {
-      this.toastService.showToast({ text: 'Task in progress', type: 'warning' });
-    }
+    return this.taskItems.findIndex((item: TaskItem) => item.id === id);
   }
 }

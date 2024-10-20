@@ -1,7 +1,7 @@
 import { OverlayRef } from '@angular/cdk/overlay';
 import { InjectionToken } from '@angular/core';
 
-export const TOAST_REF = new InjectionToken<ToastRef>('toast-ref');
+export const TOAST_REF: InjectionToken<ToastRef> = new InjectionToken<ToastRef>('toast-ref');
 
 export class ToastRef {
   constructor(private readonly overlay: OverlayRef) {}

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { TaskItemStatus } from '../../services/to-do-list';
+import { TaskItemStatus } from '../../services';
 
 type TaskStatusFilter = TaskItemStatus[];
 
